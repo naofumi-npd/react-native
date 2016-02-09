@@ -20,15 +20,10 @@ class Navigation extends Component {
             initialRoute={{
               component: LoginView,
               title: 'Login',
-              passProps: { myProp: 'foo' },
       }}/>
     );
   }
 }
-
-
-
-
 
 
 const styles = StyleSheet.create({

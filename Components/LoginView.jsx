@@ -33,6 +33,7 @@ class LoginView extends Component {
             password: ""
         };
     }
+ 
 
   render() {
     var TouchableElement = TouchableHighlight;

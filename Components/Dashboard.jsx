@@ -1,52 +1,115 @@
-'use strict';
+/**
+ * Sample React Native App
+ * https://github.com/facebook/react-native
+ */
+
 import React, {
- NavigatorIOS,
+  AppRegistry,
   Component,
+  Image,
+  ListView,
   StyleSheet,
   Text,
-  View
-} from 'react-native'; 
+  View,
+} from 'react-native';
+
+REQUEST_URL = 'http://127.0.0.1:8000/api/menu/'
 
 class Dashboard extends Component {
- 
-    constructor(props) {
-        super(props);
-        this.state = {
-            username: this.props.username,
-            password: this.props.password
-        };
+  constructor(props) {
+    super(props);
+    this.state = {
+      dataSource: new ListView.DataSource({
+        rowHasChanged: (row1, row2) => row1 !== row2,
+      }),
+      loaded: false,
+    };
+  }
+
+  componentDidMount() {
+    this.fetchData();
+  }
+
+  fetchData() {
+    fetch(REQUEST_URL)
+      .then((response) => response.json())
+      .then((responseData) => {
+        this.setState({
+          dataSource: this.state.dataSource.cloneWithRows(responseData),
+          loaded: true,
+        });
+      })
+      .done();
+  }
+
+  render() {
+    if (!this.state.loaded) {
+      return this.renderLoadingView();
     }
- 
-    render() {
-        return (
-            <View style={styles.container}>
-                <Text style={styles.heading}>
-                    Welcome {this.props.username}!
-                </Text>
-                <Text style={styles.subheading}>
-                    Your password is {this.props.password}
-                </Text>
-            </View>
-        );
-    }
- 
-};
+
+    return (
+      <ListView
+        dataSource={this.state.dataSource}
+        renderRow={this.renderMenu}
+        style={styles.listView}
+      />
+    );
+  }
+
+  renderLoadingView() {
+    return (
+      <View style={styles.container}>
+        <Text>
+          Loading recipe...
+        </Text>
+      </View>
+    );
+  }
+
+  renderMenu(menu) {
+    return (
+      <View style={styles.container}>
+        <Image
+          source={{uri: menu.image}}
+          style={styles.thumbnail}
+        />
+        <View style={styles.rightContainer}>
+          <Text style={styles.year}>{menu.description}</Text>
+        </View>
+      </View>
+    );
+  }
+}
  
 var styles = StyleSheet.create({
-    container: {
-        padding: 30,
-        marginTop: 65,
-        alignItems: "center"
-    },
-    heading: {
-        marginBottom: 20,
-        fontSize: 18,
-        textAlign: "center",
-        color: "#656565"
-    },
-    subheading: {
-        color: "#cccccc"
-    }
+  container: {
+    flex: 1,
+    padding:10,
+    paddingTop:50,
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#F5FCFF',
+  },
+  rightContainer: {
+    flex: 1,
+  },
+  title: {
+    fontSize: 20,
+    marginBottom: 8,
+    textAlign: 'center',
+  },
+  year: {
+    textAlign: 'center',
+  },
+  thumbnail: {
+    width: 53,
+    height: 81,
+  },
+  listView: {
+    paddingTop: 20,
+    backgroundColor: '#F5FCFF',
+  },
 });
  
 module.exports = Dashboard;
