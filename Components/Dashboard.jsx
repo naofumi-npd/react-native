@@ -19,6 +19,8 @@ import Confirm from './Confirm';
 const REQUEST_URL = 'http://127.0.0.1:8000/api/menu/';
 
 class Dashboard extends Component {
+
+
   constructor(props) {
     super(props);
     this.state = {
@@ -28,6 +30,8 @@ class Dashboard extends Component {
       loaded: false,
       order:[]
     };
+    this.rowPressed = this.rowPressed.bind(this);
+    this.rowChanged = this.rowChanged.bind(this);
   }
 
   calculateOrder(){
@@ -58,7 +62,6 @@ class Dashboard extends Component {
     this.props.navigator.replace(route);
   
   }
-
 
   fetchData() {
     fetch(REQUEST_URL)
@@ -98,18 +101,27 @@ class Dashboard extends Component {
     );
   }
 
-  renderMenu(menu) {
+  rowPressed(){
+    alert('pressed');    
+  }
+
+  rowChanged(){
+    alert('pressed');    
+  }
+
+  renderMenu(rowData, sectionID, rowID, highlightRow) {
     return (
       <View style={styles.container}>
         <Image
-          source={{uri: menu.image}}
+          source={{uri: rowData.image}}
           style={styles.thumbnail}
         />
         <View style={styles.rightContainer}>
-          <Text style={styles.description}>{menu.name}</Text>
+          <Text onPress={ () => this.rowPressed(rowID) } style={styles.description}>{rowData.name}</Text>
         </View>
           <TextInput style={styles.searchbox}
           keyboardType="numeric"
+          onChangeText={() => this.rowChanged()}
           />
       </View>
     );
