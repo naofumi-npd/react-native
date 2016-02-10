@@ -26,6 +26,7 @@ class Confirm extends Component {
     var ds = new ListView.DataSource({rowHasChanged: (row1, row2) => row1 !== row2,});
 
     this.state = {
+      sum : this.props.sum,
       dataSource : ds.cloneWithRows(this.props.orderItems)
     };
   }
@@ -53,7 +54,7 @@ class Confirm extends Component {
           })
         })
         .catch((error) => {
-          alert(4);
+          alert("Error");
         });
 
 

@@ -30,6 +30,20 @@ class Dashboard extends Component {
     };
   }
 
+  calculateOrder(){
+    this.setState({orderItems:this.state.order});
+    this.goNext();
+  }
+  goNext(){
+    this.props.navigator.push({
+        passProps: {
+              orderItems:this.state.orderItems,
+              sum:this.state.sum
+          },
+        component: Confirm,
+      });
+  }
+
   componentDidMount() {
     this.fetchData();
      // get current route
@@ -37,12 +51,8 @@ class Dashboard extends Component {
     // update onRightButtonPress func
     route.rightButtonTitle ='Confirm';
     route.onRightButtonPress =  () => {
-        this.props.navigator.push({
-          passProps: {
-                orderItems:this.state.order,
-            },
-          component: Confirm,
-        });
+        this.calculateOrder();
+        
     };
     // component will not rerender
     this.props.navigator.replace(route);
