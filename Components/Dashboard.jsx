@@ -15,10 +15,8 @@ import React, {
 } from 'react-native';
 
 
-
-REQUEST_URL = 'http://127.0.0.1:8000/api/menu/';
-
-
+import Confirm from './Confirm';
+const REQUEST_URL = 'http://127.0.0.1:8000/api/menu/';
 
 class Dashboard extends Component {
   constructor(props) {
@@ -32,17 +30,25 @@ class Dashboard extends Component {
     };
   }
 
-  collectData(){
-   alert(10);
-  }
-
   componentDidMount() {
     this.fetchData();
+     // get current route
+    var route = this.props.navigator.navigationContext.currentRoute;
+    // update onRightButtonPress func
+    route.rightButtonTitle ='Confirm';
+    route.onRightButtonPress =  () => {
+        this.props.navigator.push({
+          passProps: {
+                orderItems:this.state.order,
+            },
+          component: Confirm,
+        });
+    };
+    // component will not rerender
+    this.props.navigator.replace(route);
+  
   }
 
-  calculateOrder(){
-    alert(1);
-  }
 
   fetchData() {
     fetch(REQUEST_URL)
@@ -94,7 +100,6 @@ class Dashboard extends Component {
         </View>
           <TextInput style={styles.searchbox}
           keyboardType="numeric"
-          onChangeText={}
           />
       </View>
     );

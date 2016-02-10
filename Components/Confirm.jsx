@@ -17,6 +17,7 @@ import React, {
 
 import Dashboard from './Dashboard';
 
+
 var alldata = [{name: 'chris'}, {name: 'jennifer'}, {name: 'james' }];
 
 class Confirm extends Component {
@@ -27,6 +28,43 @@ class Confirm extends Component {
     this.state = {
       dataSource : ds.cloneWithRows(this.props.orderItems)
     };
+  }
+
+  componentDidMount() {
+    var route = this.props.navigator.navigationContext.currentRoute;
+    // update onRightButtonPress func
+    route.rightButtonTitle ='Order';
+    route.onRightButtonPress =  () => {
+      fetch('http://localhost:4200/order', {
+        method: 'POST',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          firstParam: 'yourValue',
+          secondParam: 'yourOtherValue',
+        })
+      })
+      .then((response) => response.text())
+        .then((responseText) => {
+          this.props.navigator.push({
+              component: Dashboard,
+          })
+        })
+        .catch((error) => {
+          alert(4);
+        });
+
+
+      alert("order sent");
+        this.props.navigator.pop({
+          component: Confirm,
+        });
+    };
+    // component will not rerender
+    this.props.navigator.replace(route);
+  
   }
 
 
