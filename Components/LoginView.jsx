@@ -14,15 +14,57 @@ import React, {
 
 
 import Dashboard from './Dashboard';
+import Confirm from './Confirm';
 
 class LoginView extends Component {
-
 
      onSubmitPressed() {
         this.props.navigator.push({
             title: "Dashboard",
             component: Dashboard,
             passProps: {username: this.state.username, password: this.state.password},
+            rightButtonTitle: "Confirm",
+            passProps: {
+                ref: (component) => {this.pushedComponent = component},
+            },
+            onRightButtonPress: () => {
+
+                if(this.pushedComponent.state.order.length < 0){
+                    alert(this.pushedComponent.state.order.length);
+                } else {
+                    this.props.navigator.push({
+                        title: "Confirm",
+                        component: Confirm,
+                        passProps: {
+                            orderItems:this.pushedComponent.state.order,
+                        },
+                        rightButtonTitle: "Order",
+                        onRightButtonPress: () => {
+                                fetch('http://localhost:4200/order', {
+                                  method: 'POST',
+                                  headers: {
+                                    'Accept': 'application/json',
+                                    'Content-Type': 'application/json',
+                                  },
+                                  body: JSON.stringify({
+                                    firstParam: 'yourValue',
+                                    secondParam: 'yourOtherValue',
+                                  })
+                                })
+                                .then((response) => response.text())
+                                  .then((responseText) => {
+                                    
+                                    this.props.navigator.push({
+                                        component: Dashboard,
+                                    })
+                                  })
+                                  .catch((error) => {
+                                    alert(4);
+                                  });
+                        }
+                    });
+                }
+            }
         });
     }
 

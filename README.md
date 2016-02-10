@@ -13,3 +13,5 @@ brew install watchman. We recommend installing watchman, otherwise you might hit
 brew install flow, if you want to use flow.
 We recommend periodically running brew update && brew upgrade to keep your programs up-to-date.
 
+
+react-native run-ios
