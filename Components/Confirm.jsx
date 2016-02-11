@@ -22,8 +22,8 @@ class Confirm extends Component {
   constructor(props) {
     super(props);
     var ds = new ListView.DataSource({rowHasChanged: (row1, row2) => row1 !== row2,});
+    
     this.state = {
-      sum : this.props.sum,
       dataSource : ds.cloneWithRows(this.props.orderItems)
     };
   }
@@ -32,6 +32,11 @@ class Confirm extends Component {
     var route = this.props.navigator.navigationContext.currentRoute;
     // update onRightButtonPress func
     route.rightButtonTitle ='Order';
+    var orderDetail = {};
+    orderDetail.tableNo = Math.floor((Math.random() * 10) + 1);
+    orderDetail.order = this.props.orderItems;
+
+
     route.onRightButtonPress =  () => {
       fetch('http://localhost:4200/order', {
         method: 'POST',
@@ -40,8 +45,7 @@ class Confirm extends Component {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          firstParam: 'yourValue',
-          secondParam: 'yourOtherValue',
+          order : orderDetail
         })
       })
       .then((response) => response.text())
