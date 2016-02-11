@@ -18,13 +18,10 @@ import React, {
 import Dashboard from './Dashboard';
 
 
-var alldata = [{name: 'chris'}, {name: 'jennifer'}, {name: 'james' }];
-
 class Confirm extends Component {
   constructor(props) {
     super(props);
     var ds = new ListView.DataSource({rowHasChanged: (row1, row2) => row1 !== row2,});
-
     this.state = {
       sum : this.props.sum,
       dataSource : ds.cloneWithRows(this.props.orderItems)
@@ -87,7 +84,7 @@ class Confirm extends Component {
           style={styles.thumbnail}
         />
         <View style={styles.rightContainer}>
-          <Text style={styles.description}>{menu.name}</Text>
+          <Text style={styles.description}>{menu.name} x {menu.quantity}</Text>
         </View>
       </View>
     );

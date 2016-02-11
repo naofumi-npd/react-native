@@ -30,13 +30,25 @@ class Dashboard extends Component {
       loaded: false,
       order:[]
     };
+    this.renderMenu = this.renderMenu.bind(this);
     this.rowPressed = this.rowPressed.bind(this);
     this.rowChanged = this.rowChanged.bind(this);
   }
 
   calculateOrder(){
-    this.setState({orderItems:this.state.order});
-    this.goNext();
+    var orderItems = [];
+
+    for(var i = 0; i< this.state.order.length;i++){
+      if(this.state.order[i].quantity > 0){
+        orderItems.push(this.state.order[i]);
+      }
+    }
+    if(orderItems.length < 1){
+      alert("Order is empty");
+    }else {
+      this.setState({orderItems:orderItems});
+      this.goNext();  
+    }    
   }
   goNext(){
     this.props.navigator.push({
@@ -105,8 +117,22 @@ class Dashboard extends Component {
     alert('pressed');    
   }
 
-  rowChanged(){
-    alert('pressed');    
+  rowChanged(text, rowID){
+    var tempOrders = this.state.order;
+
+    var tempQuantity = parseInt(text);
+
+    if (isNaN(tempQuantity) === true){
+      tempOrders[rowID].quantity = 0;
+    }
+    else if(tempQuantity > 0){
+      tempOrders[rowID].quantity = tempQuantity;
+    } else {
+      tempOrders[rowID].quantity = 0;
+    }
+
+    this.setState({order:tempOrders});
+
   }
 
   renderMenu(rowData, sectionID, rowID, highlightRow) {
@@ -121,7 +147,7 @@ class Dashboard extends Component {
         </View>
           <TextInput style={styles.searchbox}
           keyboardType="numeric"
-          onChangeText={() => this.rowChanged()}
+          onChangeText={(text) => this.rowChanged(text, rowID)}
           />
       </View>
     );
